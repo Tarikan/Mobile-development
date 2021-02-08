@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">LabWork</string>
+	<string name="OrganizationIdentifier">ua.kpi.comsys.IO8108</string>
+    <string name="title_home">General</string>
+	<string name="text_home">Іванишин Тарас\nГрупа ІО-81\nЗК ІО8108</string>
+	<string name="title_dashboard">Dashboard</string>
+	<string name="text_dashboard">Tab 2</string>
+	
+</resources>
