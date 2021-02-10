@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MSPLabWork.Views.ItemsPage"
+             Title="{Binding Title}"
+             xmlns:local="clr-namespace:MSPLabWork.ViewModels"
+             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             x:Name="BrowseItemsPage">
+
+    <ContentPage.ToolbarItems>
+
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        <Switch ThumbColor="LightBlue" HorizontalOptions="Center" x:Name="chartSwitch" Toggled="OnToggled"/>
+        <Label Text="Line" HorizontalOptions="Center" x:Name="chartLabel" FontSize="Large" />
+        <microcharts:ChartView x:Name="chartView" HeightRequest="500"/>
+    </StackLayout>
+
+
+</ContentPage>
