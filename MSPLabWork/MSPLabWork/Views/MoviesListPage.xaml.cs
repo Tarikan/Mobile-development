@@ -24,7 +24,7 @@ namespace MSPLabWork.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            MoviesListView.ItemsSource = Services.BookReadService.ExtractMovies();
+            MoviesListView.ItemsSource = Services.MovieReadService.ExtractMovies();
         }
 
         async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)

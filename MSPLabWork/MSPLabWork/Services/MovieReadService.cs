@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MSPLabWork.Services
 {
-    public static class BookReadService
+    public static class MovieReadService
     {
         public static IEnumerable<Movie> ExtractMovies()
         {
