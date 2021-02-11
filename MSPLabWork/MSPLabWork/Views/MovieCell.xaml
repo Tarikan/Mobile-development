@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MSPLabWork.Views.MovieCell">
+    <ViewCell.View>
+        <StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Image x:Name="PosterImage" Margin="12" Aspect="AspectFit"/>
+                <StackLayout Orientation="Vertical">
+                    <Label x:Name="TitleLabel" FontSize="24"/>
+                    <Label x:Name="YearLabel" FontSize="22"/>
+                    <Label x:Name="TypeLabel" FontSize="18"/>
+                    <Label x:Name="ImdbLabel" FontSize="18"/>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ViewCell.View>
+</ViewCell>

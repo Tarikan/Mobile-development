@@ -7,12 +7,64 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\MoviesList.json" />
+    <None Remove="Resources\Posters\Poster_01.jpg" />
+    <None Remove="Resources\Posters\Poster_02.jpg" />
+    <None Remove="Resources\Posters\Poster_03.jpg" />
+    <None Remove="Resources\Posters\Poster_05.jpg" />
+    <None Remove="Resources\Posters\Poster_06.jpg" />
+    <None Remove="Resources\Posters\Poster_07.jpg" />
+    <None Remove="Resources\Posters\Poster_08.jpg" />
+    <None Remove="Resources\Posters\Poster_10.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\MoviesList.json" />
+    <EmbeddedResource Include="Resources\Posters\Poster_01.jpg" />
+    <EmbeddedResource Include="Resources\Posters\Poster_02.jpg" />
+    <EmbeddedResource Include="Resources\Posters\Poster_03.jpg" />
+    <EmbeddedResource Include="Resources\Posters\Poster_05.jpg" />
+    <EmbeddedResource Include="Resources\Posters\Poster_06.jpg" />
+    <EmbeddedResource Include="Resources\Posters\Poster_07.jpg" />
+    <EmbeddedResource Include="Resources\Posters\Poster_08.jpg" />
+    <EmbeddedResource Include="Resources\Posters\Poster_10.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microcharts.Forms" Version="0.9.5.9" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Lib\Lib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\..\..\..\Microsoft Visual Studio\IDE\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\MonoAndroid\v9.0\Mono.Android.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MovieCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MoviesListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
