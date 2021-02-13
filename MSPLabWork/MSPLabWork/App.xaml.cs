@@ -1,12 +1,23 @@
-﻿using MSPLabWork.Views;
-using System;
+﻿using MSPLabWork.Services;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace MSPLabWork
 {
     public partial class App : Application
     {
+        private static MovieStore dataService;
+        
+        public static MovieStore DataStore
+        {
+            get
+            {
+                if (dataService == null)
+                {
+                    dataService = new MovieStore();
+                }
+                return dataService;
+            }
+        }
 
         public App()
         {

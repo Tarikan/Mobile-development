@@ -11,6 +11,8 @@ namespace MSPLabWork
         public AppShell()
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(MovieDescriptionPage), typeof(MovieDescriptionPage));
+            Routing.RegisterRoute(nameof(NewMoviePage), typeof(NewMoviePage));
         }
 
     }

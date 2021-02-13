@@ -3,13 +3,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using MSPLabWork.Models;
+using MSPLabWork.ViewModels;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace MSPLabWork.Services
 {
     public static class MovieReadService
     {
-        public static IEnumerable<Movie> ExtractMovies()
+        public static List<Movie> ExtractMovies()
         {
             var movies = new List<Movie>();
             var assembly = IntrospectionExtensions.GetTypeInfo(typeof(Resources.Resources)).Assembly;
@@ -31,6 +33,30 @@ namespace MSPLabWork.Services
                 }
             }
             return movies;
+        }
+
+        public static MovieInfo ExtractMovieInfo(string imdbId)
+        {
+            MovieInfo info;
+
+            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(Resources.Resources)).Assembly;
+
+            using (var stream = assembly.GetManifestResourceStream($"MSPLabWork.Resources.MovieInfo.{imdbId}.txt"))
+            {
+                if (stream == null)
+                {
+                    System.Console.WriteLine("File " + $"MSPLabWork.Resources.MovieInfo.{imdbId}.txt" + " not found");
+                    return null;
+                }
+                using (var jsonReader = new StreamReader(stream))
+                {
+                    var j = jsonReader.ReadToEnd();
+                    
+                    info = JsonConvert.DeserializeObject<MovieInfo>(j);
+                }
+            }
+
+            return info;
         }
     }
 }

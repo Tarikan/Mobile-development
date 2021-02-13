@@ -5,7 +5,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MSPLabWork.Models;
-
+using MSPLabWork.ViewModels;
+using MSPLabWork.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,17 +15,12 @@ namespace MSPLabWork.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MoviesListPage : ContentPage
     {
-        public List<Movie> Movies;
-
+        MoviesListViewModel _viewModel;
         public MoviesListPage()
         {
             InitializeComponent();
-        }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            MoviesListView.ItemsSource = Services.MovieReadService.ExtractMovies();
+            BindingContext = _viewModel = new MoviesListViewModel();
         }
 
         async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -32,10 +28,27 @@ namespace MSPLabWork.Views
             if (e.Item == null)
                 return;
 
-            await DisplayAlert("Item Tapped", "An item was tapped.", "OK");
+            Movie movie = e.Item as Movie;
 
-            //Deselect Item
-            ((ListView)sender).SelectedItem = null;
+
+            if (movie.ImdbID == "noid")
+                return;
+
+            //Console.WriteLine($"{nameof(MovieDescriptionPage)}?{nameof(MovieDescriptionViewModel.ImdbId)}={movie.ImdbID}");
+            await Shell.Current.GoToAsync($"{nameof(MovieDescriptionPage)}?{nameof(MovieDescriptionViewModel.ImdbId)}={movie.ImdbID}");
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _viewModel.OnAppearing();
+        }
+
+        protected void OnDeleteMovie(object sender, EventArgs e)
+        {
+            var movie = ((MenuItem)sender).CommandParameter as Movie;
+            Console.WriteLine(movie.Title);
+            _viewModel.OnDeleteMovie(movie);
         }
     }
 }

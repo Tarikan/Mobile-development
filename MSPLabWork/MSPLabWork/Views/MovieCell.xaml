@@ -10,7 +10,7 @@
                     <Label x:Name="TitleLabel" FontSize="24"/>
                     <Label x:Name="YearLabel" FontSize="22"/>
                     <Label x:Name="TypeLabel" FontSize="18"/>
-                    <Label x:Name="ImdbLabel" FontSize="18"/>
+
                 </StackLayout>
             </StackLayout>
         </StackLayout>

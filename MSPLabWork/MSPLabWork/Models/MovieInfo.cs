@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MSPLabWork.Models
 {
-    class MovieInfo
+    public class MovieInfo
     {
         public string Title { get; set; }
 
@@ -28,8 +28,10 @@ namespace MSPLabWork.Models
 
         public string Awards { get; set; }
 
-        public string Rating { get; set; }
+        public string imdbRating { get; set; }
 
         public string Plot { get; set; }
+
+        public string Poster { get; set; }
     }
 }

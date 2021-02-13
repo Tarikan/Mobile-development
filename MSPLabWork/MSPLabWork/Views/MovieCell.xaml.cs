@@ -63,8 +63,7 @@ namespace MSPLabWork.Views
                 TitleLabel.Text = Title;
                 TypeLabel.Text = Type;
                 YearLabel.Text = Year;
-                ImdbLabel.Text = $"imdbID {ImdbId}";
-                Console.WriteLine($"Poster = {Poster}");
+                //ImdbLabel.Text = $"imdbID {ImdbId}";
                 PosterImage.Source =
                     ImageSource.FromResource("MSPLabWork.Resources.Posters." + Poster,
                         typeof(MovieCell).GetTypeInfo().Assembly);
@@ -76,7 +75,7 @@ namespace MSPLabWork.Views
             TypeLabel.SetBinding(Label.TextProperty, "Type");
             TitleLabel.SetBinding(Label.TextProperty, "Title");
             YearLabel.SetBinding(Label.TextProperty, "Year");
-            ImdbLabel.SetBinding(Label.TextProperty, "ImdbId");
+            //ImdbLabel.SetBinding(Label.TextProperty, "ImdbId");
             PosterImage.SetBinding(Image.SourceProperty, "Poster");
         }
     }

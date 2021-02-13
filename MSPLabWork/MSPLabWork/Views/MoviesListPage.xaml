@@ -3,17 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MSPLabWork.ViewModels"
              xmlns:v="clr-namespace:MSPLabWork.Views"
-             x:Class="MSPLabWork.Views.MoviesListPage">
-    <ContentPage.BindingContext>
-        <vm:MoviesListViewModel/>
-    </ContentPage.BindingContext>
-    <ListView x:Name="MoviesListView"
-            HasUnevenRows="True"
-            ItemTapped="Handle_ItemTapped">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <v:MovieCell Title="{Binding Title}" Year="{Binding Year}" Type="{Binding Type}" Poster="{Binding Poster}" ImdbId="{Binding ImdbID}"/>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+             x:Class="MSPLabWork.Views.MoviesListPage"
+             Title="{Binding Title}">
+
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add"
+                    Order="Primary"
+                    Command="{Binding AddItemCommand}"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <RefreshView Command="{Binding RefreshCommand}"
+                     IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <StackLayout>
+                <SearchBar x:Name="MovieSearchBar"
+                       Placeholder="Search movies..."
+                       Text="{Binding SearchBarText}"/>
+                <ListView x:Name="MoviesListView"
+                    SelectionMode="None"
+                    HasUnevenRows="True"
+                    ItemTapped="Handle_ItemTapped"
+                    ItemsSource="{Binding Movies}"
+                    CachingStrategy="RecycleElement">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <v:MovieCell Title="{Binding Title}"
+                                     Year="{Binding Year}"
+                                     Type="{Binding Type}"
+                                     Poster="{Binding Poster}"
+                                     ImdbId="{Binding ImdbID}">
+                                <v:MovieCell.ContextActions>
+                                    <MenuItem Text="Delete"
+                                              Clicked="OnDeleteMovie"
+                                              CommandParameter="{Binding .}"/>
+                                </v:MovieCell.ContextActions>
+                            </v:MovieCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </RefreshView>
+    </ContentPage.Content>
 </ContentPage>

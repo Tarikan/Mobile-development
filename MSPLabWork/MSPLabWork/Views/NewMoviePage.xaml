@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MSPLabWork.Views.NewMoviePage"
+             xmlns:vm="clr-namespace:MSPLabWork.ViewModels"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:NewMovieViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="Label"
+               ApplyToDerivedTypes="True">
+            <Setter Property="FontSize"
+                    Value="25"/>
+        </Style>
+        <Style TargetType="Entry"
+               ApplyToDerivedTypes="True">
+            <Setter Property="FontSize"
+                    Value="25"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Margin="10, 10, 10, 10">
+                <Label Text="Title" x:Name="TitleLabel" />
+
+                <Entry x:Name="TItleEntry" Text="{Binding MovieTitle}"/>
+
+                <Label Text="Type" x:Name="TypeLabel" />
+
+                <Entry x:Name="TypeEntry" Text="{Binding Type}"/>
+
+                <Label Text="Year" x:Name="YearLabel" />
+
+                <Entry x:Name="YearEntry" Text="{Binding Year}"/>
+
+                <Button Text="Submit" x:Name="SubmitButton" Command="{Binding SubmitCommand}"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

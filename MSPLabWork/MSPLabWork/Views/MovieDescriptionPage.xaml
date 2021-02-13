@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="MSPLabWork.Views.MovieDescriptionPage"
+            xmlns:vm="clr-namespace:MSPLabWork.ViewModels"
+            Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:MovieDescriptionViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="Label"
+               ApplyToDerivedTypes="True">
+            <Setter Property="FontSize"
+                    Value="18"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Margin="8, 8, 8, 8">
+                <Image Source="{Binding PosterImageSource}" x:Name="PosterImage" HeightRequest="350"/>
+                <Label Text="{Binding Title, StringFormat='Title: {0}'}" x:Name="TitleLabel" />
+                <Label Text="{Binding Year, StringFormat='Year: {0}'}" x:Name="YearLabel" />
+                <Label Text="{Binding Genre, StringFormat='Genre: {0}'}" x:Name="GenreLabel" />
+                <Label Text="{Binding Director, StringFormat='Director: {0}'}" x:Name="DirectorLabel" />
+                <Label Text="{Binding Actors, StringFormat='Authors: {0}'}" x:Name="ActorsLabel" />
+                <Label Text="{Binding Country, StringFormat='Country: {0}'}"
+                       x:Name="CountryLabel"
+                       Margin="0, 10, 0, 0" />
+                <Label Text="{Binding Language, StringFormat='Language: {0}'}" x:Name="LanguageLabel" />
+                <Label Text="{Binding Production, StringFormat='Production: {0}'}" x:Name="ProductionLabel" />
+                <Label Text="{Binding Released, StringFormat='Released: {0}'}" x:Name="ReleasedLabel" />
+                <Label Text="{Binding Runtime, StringFormat='Runtime: {0}'}" x:Name="RuntimeLabel" />
+                <Label Text="{Binding Awards, StringFormat='Awards: {0}'}"
+                       x:Name="AwardsLabel"
+                       Margin="0, 10, 0, 0"/>
+                <Label Text="{Binding imdbRating, StringFormat='Rating: {0}'}" x:Name="RatingLabel" />
+                <Label Text="{Binding Plot, StringFormat='Plot: {0}'}"
+                       x:Name="PlotLabel"
+                       Margin="0, 10, 0, 0"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
