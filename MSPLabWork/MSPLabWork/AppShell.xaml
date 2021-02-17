@@ -33,6 +33,7 @@
         <ShellContent Title="General" Icon="icon_about.png" Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
         <ShellContent Title="Charts" Icon="icon_feed.png" ContentTemplate="{DataTemplate local:ItemsPage}" />
         <ShellContent Title="Movies List" Icon="icon_list.png" ContentTemplate="{DataTemplate local:MoviesListPage}"/>
+        <ShellContent Title="Image Gallery" Icon="icon_grid.png" ContentTemplate="{DataTemplate local:ImageGridPage}"/>
     </TabBar>
 
 </Shell>
