@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MSPLabWork.Utils
+﻿namespace MSPLabWork.Utils
 {
     public class PropertyCopier<TParent, TChild> where TParent : class
                                             where TChild : class

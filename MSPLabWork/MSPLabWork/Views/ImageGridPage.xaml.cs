@@ -1,107 +1,48 @@
 ﻿using MSPLabWork.ViewModels;
 using Plugin.Media;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net.Http;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace MSPLabWork.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ImageGridPage : ContentPage
     {
-        private int _photoCounter = 0;
-
-        private int _gridCounter = 0;
-
         private ImageGridViewModel _viewModel;
-
-        public static readonly BindableProperty FrameWidthProperty =
-            BindableProperty.Create("Width", typeof(double), typeof(ImageGridPage));
-
-        public double FrameWidth
-        {
-            get => (double)GetValue(FrameWidthProperty);
-            set => SetValue(FrameWidthProperty, value);
-        }
         
         public ImageGridPage()
         {
             InitializeComponent();
             BindingContext = _viewModel = new ImageGridViewModel();
-            
+            //var thread = new Thread(LoadImages);
+            //thread.Start();
+            LoadImages();
         }
 
-        protected override void OnSizeAllocated(double width, double height)
+        protected async Task LoadImages()
         {
-            base.OnSizeAllocated(width, height);
-            //Console.WriteLine(ImageLayout.Width);
-            FrameWidth = ImageLayout.Width / 5;
-        }
+            var httpClient = new HttpClient();
 
-        protected BoxView CreateBox()
-        {
-            
-            var ret = new BoxView()
+            var req = await httpClient.GetAsync(new Uri(
+                    "https://pixabay.com/api/?key=19193969-87191e5db266905fe8936d565&q=small+animals&image_type=photo&per_page=18"
+                ));
+
+            var o = JObject.Parse(await req.Content.ReadAsStringAsync());
+
+            List<string> images = o["hits"].Select(u => (string)u["previewURL"]).ToList();
+
+            foreach(var image in images)
             {
-                Color = Color.Blue,
-                Margin=5
-            };
-
-            
-
-
-            switch (_photoCounter % 6)
-            {
-                case 0:
-                    AbsoluteLayout.SetLayoutBounds(ret, new Rectangle(0,
-                        0 + _gridCounter* FrameWidth * 4,
-                        3 * FrameWidth,
-                        FrameWidth * 3));
-                    break;
-                case 1:
-                    AbsoluteLayout.SetLayoutBounds(ret, new Rectangle(0.6,
-                        0 + _gridCounter * FrameWidth * 4,
-                        2 * FrameWidth,
-                        FrameWidth * 2));
-                    break;
-                case 2:
-                    AbsoluteLayout.SetLayoutBounds(ret, new Rectangle(0.6,
-                        FrameWidth * 2 + _gridCounter * FrameWidth * 4,
-                        2 * FrameWidth,
-                        FrameWidth * 2));
-                    break;
-                case 3:
-                    AbsoluteLayout.SetLayoutBounds(ret, new Rectangle(0,
-                        FrameWidth * 3 + _gridCounter * FrameWidth * 4,
-                        FrameWidth,
-                        FrameWidth));
-                    break;
-                case 4:
-                    AbsoluteLayout.SetLayoutBounds(ret, new Rectangle(0.2,
-                        FrameWidth * 3 + _gridCounter * FrameWidth * 4,
-                        FrameWidth,
-                        FrameWidth));
-                    break;
-                case 5:
-                    AbsoluteLayout.SetLayoutBounds(ret, new Rectangle(0.4,
-                        FrameWidth * 3 + _gridCounter * FrameWidth * 4,
-                        FrameWidth,
-                        FrameWidth));
-                    _gridCounter++;
-                    break;
+                ImageLayout.AddElement(ImageSource.FromUri(new Uri(image)));
             }
-            _photoCounter++;
-
-            //AbsoluteLayout.SetLayoutFlags(ret, AbsoluteLayoutFlags.XProportional);
-            //AbsoluteLayout.SetLayoutFlags(ret, AbsoluteLayoutFlags.WidthProportional);
-            AbsoluteLayout.SetLayoutFlags(ret, AbsoluteLayoutFlags.XProportional);
-
-            return ret;
         }
 
         protected async void OnAddButtonClicked(object sender, EventArgs e)
@@ -112,7 +53,12 @@ namespace MSPLabWork.Views
                 return;
             }
 
+            NavigationPage.SetHasNavigationBar(this, false);
+
             var file = await CrossMedia.Current.PickPhotoAsync();
+
+            NavigationPage.SetHasNavigationBar(this, true);
+
             if (file == null)
                 return;
             ImageLayout.AddElement(ImageSource.FromStream(() => file.GetStream()));

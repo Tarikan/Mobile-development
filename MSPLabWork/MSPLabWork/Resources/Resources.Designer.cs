@@ -61,6 +61,15 @@ namespace MSPLabWork.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 96903c50.
+        /// </summary>
+        public static string ImdbAPIKey {
+            get {
+                return ResourceManager.GetString("ImdbAPIKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] MoviesList {

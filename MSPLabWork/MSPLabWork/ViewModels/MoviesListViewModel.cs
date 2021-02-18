@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using Xamarin.Forms;
+using Newtonsoft.Json;
 
 namespace MSPLabWork.ViewModels
 {
@@ -16,6 +18,8 @@ namespace MSPLabWork.ViewModels
         public Command RefreshCommand { get; }
         public Command OnAppearingCommand { get; }
         public Command<Movie> DeleteMovieCommand { get; }
+
+        private HttpClient httpClient;
 
         public ObservableCollection<Movie> Movies
         {
@@ -49,6 +53,8 @@ namespace MSPLabWork.ViewModels
         {
             Title = "Movies";
 
+            httpClient = new HttpClient();
+
             Movies = new ObservableCollection<Movie>();
 
             RefreshCommand = new Command(RefreshItems);
@@ -66,6 +72,34 @@ namespace MSPLabWork.ViewModels
         {
             IsBusy = true;
 
+            if (SearchBarText.Length >= 3)
+            {
+                var data =
+                    await httpClient
+                    .GetAsync(new Uri($"https://www.omdbapi.com/?s=" +
+                    $"{SearchBarText.Trim().Replace(' ', '+')}" +
+                    $"&apikey={Resources.Resources.ImdbAPIKey}&page=1"));
+                var json = await data.Content.ReadAsStringAsync();
+                if (!data.IsSuccessStatusCode || json == null || json==string.Empty)
+                    return;
+                //Console.WriteLine(await data.Content.ReadAsStringAsync());
+                //Console.WriteLine($"{SearchBarText.Trim().Replace(' ', '+')}");
+                try
+                {
+                    Movies = new ObservableCollection<Movie>(
+                    Services.MovieReadService.ExtractMoviesFormString(json));
+                }
+                catch
+                {
+                    IsBusy = false;
+                    return;
+                }
+                IsBusy = false;
+
+                return;
+            }
+
+            /*
             var data = await App.DataStore.GetItemsAsync();
 
             if (SearchBarText == String.Empty)

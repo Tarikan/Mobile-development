@@ -1,6 +1,7 @@
 ﻿using MSPLabWork.Models;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using Xamarin.Forms;
@@ -145,10 +146,23 @@ namespace MSPLabWork.ViewModels
             GoBackCommand = new Command(OnBack);
         }
 
-        protected void LoadInfo(string imdbId)
+        protected async void LoadInfo(string imdbId)
         {
-            var info = Services.MovieReadService.ExtractMovieInfo(imdbId);
-            Console.WriteLine("MSPLabWork.Resources.Posters." + info.Poster);
+            var httpClient = new HttpClient();
+            HttpResponseMessage data;
+            try
+            {
+                data = await httpClient.GetAsync(new Uri($"https://www.omdbapi.com/?i=" +
+                    $"{imdbId}" +
+                    $"&apikey={Resources.Resources.ImdbAPIKey}"));
+            }
+            catch
+            {
+                return;
+            }
+            //var info = Services.MovieReadService.ExtractMovieInfo(imdbId);
+            var info = Services.MovieReadService.ExtractMovieInfoFromString(await data.Content.ReadAsStringAsync());
+            
             if (info != null)
             {
                 Utils.PropertyCopier<MovieInfo, MovieDescriptionViewModel>.Copy(info, this);
@@ -158,8 +172,12 @@ namespace MSPLabWork.ViewModels
                 Console.WriteLine("Info is null");
                 return;
             }
-            PosterImageSource = ImageSource.FromResource("MSPLabWork.Resources.Posters." + Poster,
-                    typeof(MovieDescriptionViewModel).GetTypeInfo().Assembly);
+            try
+            {
+                PosterImageSource = ImageSource.FromUri(new Uri(Poster));
+            }
+            catch
+            { }
         }
 
         async void OnBack()

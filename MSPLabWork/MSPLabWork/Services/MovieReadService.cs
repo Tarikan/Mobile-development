@@ -35,6 +35,21 @@ namespace MSPLabWork.Services
             return movies;
         }
 
+        public static List<Movie> ExtractMoviesFormString(string json)
+        {
+            JObject structure = JObject.Parse(json);
+            var movies = structure["Search"].Select(t => new Movie()
+            {
+                Title = (string)t["Title"],
+                Type = (string)t["Type"],
+                Year = (string)t["Year"],
+                Poster = (string)t["Poster"],
+                ImdbID = (string)t["imdbID"]
+            }).ToList();
+
+            return movies;
+        }
+
         public static MovieInfo ExtractMovieInfo(string imdbId)
         {
             MovieInfo info;
@@ -55,6 +70,15 @@ namespace MSPLabWork.Services
                     info = JsonConvert.DeserializeObject<MovieInfo>(j);
                 }
             }
+
+            return info;
+        }
+
+        public static MovieInfo ExtractMovieInfoFromString(string json)
+        {
+            MovieInfo info;
+
+            info = JsonConvert.DeserializeObject<MovieInfo>(json);
 
             return info;
         }

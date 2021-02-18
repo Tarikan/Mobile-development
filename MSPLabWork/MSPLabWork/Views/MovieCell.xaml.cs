@@ -64,9 +64,18 @@ namespace MSPLabWork.Views
                 TypeLabel.Text = Type;
                 YearLabel.Text = Year;
                 //ImdbLabel.Text = $"imdbID {ImdbId}";
-                PosterImage.Source =
-                    ImageSource.FromResource("MSPLabWork.Resources.Posters." + Poster,
-                        typeof(MovieCell).GetTypeInfo().Assembly);
+                if (Poster != null)
+                    try
+                    {
+                        PosterImage.Source =
+                        ImageSource.FromUri(new Uri(Poster));
+                    }
+                    catch
+                    {
+                    }
+                //PosterImage.Source =
+                //    ImageSource.FromResource("MSPLabWork.Resources.Posters." + Poster,
+                //        typeof(MovieCell).GetTypeInfo().Assembly);
             }
         }
         public MovieCell()
