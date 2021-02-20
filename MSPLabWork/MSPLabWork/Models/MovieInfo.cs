@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace MSPLabWork.Models
 {
@@ -33,5 +34,8 @@ namespace MSPLabWork.Models
         public string Plot { get; set; }
 
         public string Poster { get; set; }
+
+        [PrimaryKey]
+        public string ImdbID { get; set; }
     }
 }

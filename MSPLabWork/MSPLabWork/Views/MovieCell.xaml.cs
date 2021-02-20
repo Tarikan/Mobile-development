@@ -67,8 +67,12 @@ namespace MSPLabWork.Views
                 if (Poster != null)
                     try
                     {
-                        PosterImage.Source =
-                        ImageSource.FromUri(new Uri(Poster));
+                        //PosterImage.Source = ImageSource.FromUri(new Uri(Poster));
+                        PosterImage.Source = new UriImageSource
+                        {
+                            CachingEnabled = true,
+                            Uri = new Uri(Poster),
+                        };
                     }
                     catch
                     {

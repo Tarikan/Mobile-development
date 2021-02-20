@@ -74,20 +74,36 @@ namespace MSPLabWork.ViewModels
 
             if (SearchBarText.Length >= 3)
             {
-                var data =
+                HttpResponseMessage data;
+                string json;
+                List<Movie> res;
+                try
+                {
+                    data =
                     await httpClient
                     .GetAsync(new Uri($"https://www.omdbapi.com/?s=" +
                     $"{SearchBarText.Trim().Replace(' ', '+')}" +
                     $"&apikey={Resources.Resources.ImdbAPIKey}&page=1"));
-                var json = await data.Content.ReadAsStringAsync();
-                if (!data.IsSuccessStatusCode || json == null || json==string.Empty)
-                    return;
-                //Console.WriteLine(await data.Content.ReadAsStringAsync());
-                //Console.WriteLine($"{SearchBarText.Trim().Replace(' ', '+')}");
+                    json = await data.Content.ReadAsStringAsync();
+                    if (!data.IsSuccessStatusCode || json == null || json == string.Empty)
+                        return;
+                    res = Services.MovieReadService.ExtractMoviesFormString(json);
+                }
+                catch
+                {
+                    
+                    res = await App.DataBase.SearchMoviesAsync(SearchBarText);
+                    Console.WriteLine($"Result from db is null: {res == null}");
+                    Console.WriteLine($"Results len {res.Count()}");
+                    if (res == null)
+                        return;
+                }
+
                 try
                 {
-                    Movies = new ObservableCollection<Movie>(
-                    Services.MovieReadService.ExtractMoviesFormString(json));
+                    await App.DataBase.StoreMoviesAsync(res);
+                    Movies = new ObservableCollection<Movie>(res
+                    );
                 }
                 catch
                 {
@@ -98,30 +114,6 @@ namespace MSPLabWork.ViewModels
 
                 return;
             }
-
-            /*
-            var data = await App.DataStore.GetItemsAsync();
-
-            if (SearchBarText == String.Empty)
-            {
-                Movies = new ObservableCollection<Movie>(data);
-                //foreach (var item in data.Where(m => !Movies.Contains(m)))
-                //    Movies.Add(item);
-                IsBusy = false;
-                
-                return;
-            }
-
-            Movies = new ObservableCollection<Movie>(data
-                .Where(m => m.Title.IndexOf(SearchBarText, StringComparison.OrdinalIgnoreCase) >= 0));
-            /*
-            data = data
-                .Where(m => m.Title.IndexOf(SearchBarText, StringComparison.OrdinalIgnoreCase) >= 0);
-            foreach (var item in Movies.Where(m => !data.Contains(m)))
-                Movies.Remove(item);
-            foreach (var item in data.Where(m => !Movies.Contains(m)))
-                Movies.Add(item);
-            */
             IsBusy = false;
         }
 
@@ -144,7 +136,8 @@ namespace MSPLabWork.ViewModels
 
         public void OnAppearing()
         {
-            IsBusy = true;
+            if (SearchBarText.Length >= 3 && Movies.Count() == 0)
+                IsBusy = true;
         }
 
         public async void OnDeleteMovie(Movie movie)

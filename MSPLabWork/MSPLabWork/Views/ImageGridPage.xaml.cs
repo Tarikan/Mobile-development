@@ -24,24 +24,48 @@ namespace MSPLabWork.Views
             BindingContext = _viewModel = new ImageGridViewModel();
             //var thread = new Thread(LoadImages);
             //thread.Start();
-            LoadImages();
+            _ = LoadImages();
         }
 
         protected async Task LoadImages()
         {
             var httpClient = new HttpClient();
 
-            var req = await httpClient.GetAsync(new Uri(
-                    "https://pixabay.com/api/?key=19193969-87191e5db266905fe8936d565&q=small+animals&image_type=photo&per_page=18"
-                ));
+            string content;
 
-            var o = JObject.Parse(await req.Content.ReadAsStringAsync());
+            var adress = "https://pixabay.com/api/?key=19193969-87191e5db266905fe8936d565&q=small+animals&image_type=photo&per_page=18";
+
+            try
+            {
+                var req = await httpClient.GetAsync(new Uri(
+                    adress
+                ));
+                content = await req.Content.ReadAsStringAsync();
+
+                await App.DataBase.CacheReqestAsync(new Models.CachedRequest() { Request = adress, ResponseBody = content});
+            }
+            catch
+            {
+                content = (await App.DataBase.GetCachedRequestAsync(
+                    adress)).ResponseBody;
+
+                if (string.IsNullOrEmpty(content))
+                    return;
+            }
+
+            var o = JObject.Parse(content);
 
             List<string> images = o["hits"].Select(u => (string)u["previewURL"]).ToList();
 
             foreach(var image in images)
             {
-                ImageLayout.AddElement(ImageSource.FromUri(new Uri(image)));
+                //ImageLayout.AddElement(ImageSource.FromUri(new Uri(image)));
+                ImageLayout.AddElement(new UriImageSource
+                {
+                    CachingEnabled = true,
+                    CacheValidity = new TimeSpan(5, 0, 0, 0),
+                    Uri = new Uri(image)
+                });
             }
         }
 

@@ -1,9 +1,6 @@
 ﻿using MSPLabWork.Models;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Reflection;
-using System.Text;
 using Xamarin.Forms;
 
 namespace MSPLabWork.ViewModels
@@ -13,7 +10,7 @@ namespace MSPLabWork.ViewModels
     {
         public Command GoBackCommand { get; }
 
-        public string Title
+        public new string Title
         {
             get => movieTitle;
             set => SetProperty(ref movieTitle, value);
@@ -149,22 +146,32 @@ namespace MSPLabWork.ViewModels
         protected async void LoadInfo(string imdbId)
         {
             var httpClient = new HttpClient();
+            MovieInfo info;
             HttpResponseMessage data;
             try
             {
                 data = await httpClient.GetAsync(new Uri($"https://www.omdbapi.com/?i=" +
                     $"{imdbId}" +
                     $"&apikey={Resources.Resources.ImdbAPIKey}"));
+                info = Services.MovieReadService.ExtractMovieInfoFromString(await data.Content.ReadAsStringAsync());
             }
             catch
             {
-                return;
+                info = await App.DataBase.GetMovieInfoAsync(imdbId);
+                if (info == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Cannot retrieve movie info", "ok");
+                    await Shell.Current.GoToAsync("..");
+                    return;
+                }
+                
             }
             //var info = Services.MovieReadService.ExtractMovieInfo(imdbId);
-            var info = Services.MovieReadService.ExtractMovieInfoFromString(await data.Content.ReadAsStringAsync());
+            
             
             if (info != null)
             {
+                await App.DataBase.StoreMovieInfoAsync(info);
                 Utils.PropertyCopier<MovieInfo, MovieDescriptionViewModel>.Copy(info, this);
             }
             else
@@ -174,7 +181,12 @@ namespace MSPLabWork.ViewModels
             }
             try
             {
-                PosterImageSource = ImageSource.FromUri(new Uri(Poster));
+                //PosterImageSource = ImageSource.FromUri(new Uri(Poster));
+                PosterImageSource = new UriImageSource
+                {
+                    CachingEnabled = true,
+                    Uri = new Uri(Poster)
+                };
             }
             catch
             { }

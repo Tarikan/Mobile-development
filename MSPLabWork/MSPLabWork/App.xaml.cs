@@ -1,4 +1,7 @@
-﻿using MSPLabWork.Services;
+﻿using MSPLabWork.Data;
+using MSPLabWork.Services;
+using System;
+using System.IO;
 using Xamarin.Forms;
 
 namespace MSPLabWork
@@ -16,6 +19,21 @@ namespace MSPLabWork
                     dataService = new MovieStore();
                 }
                 return dataService;
+            }
+        }
+
+        private static AppDB _db;
+
+        public static AppDB DataBase
+        {
+            get
+            {
+                if (_db == null)
+                {
+                    _db = new AppDB(Path
+                        .Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "DB.db3"));
+                }
+                return _db;
             }
         }
 

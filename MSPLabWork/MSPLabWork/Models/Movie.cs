@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,6 +15,7 @@ namespace MSPLabWork.Models
 
         public string Year { get; set; }
 
+        [PrimaryKey]
         public string ImdbID { get; set; }
     }
 }
